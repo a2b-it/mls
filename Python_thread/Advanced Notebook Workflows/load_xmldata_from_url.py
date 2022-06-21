@@ -71,7 +71,6 @@ endpoint_config_schema = {
      StructField("listAgentPhone1", StringType(), True)
    ]),
   "listings-2.0":StructType([
-     StructField("dummy", StringType(), True),
      StructField("mlsSid", StringType(), True),
      StructField("listAgentId", StringType(), True),
      StructField("listAgentFirstName", StringType(), True),
@@ -229,7 +228,7 @@ endpoint_config_cols = {
       "listAgentPhone1"
    ],
    "listings-2.0":[
-      "dummy",
+     
       "mlsSid",
       "listAgentId",
       "listAgentFirstName",
@@ -333,7 +332,7 @@ endpoint_config_cols = {
 ## StructField(<>, StringType(), True),
 ## 0: endpoint, 1: authToken, 2: mlsSid, 3: fromDate, 4: toDate( if applicable)
 
-prodEndpoints = {
+uatEndpoints = {
   "agent-move-1.0" : 'http://apis.terradatum.com//firstam/firstam/agent-move-1.0.xml',
   "agent-new-1.0" : 'http://apis.terradatum.com//firstam/firstam/agent-new-1.0.xml',
   "agent-2.0" : 'http://apis.terradatum.com//firstam/firstam/agent-2.0.xml',
@@ -345,14 +344,14 @@ prodEndpoints = {
 }
 
 localEndpoints = {
-  "agent-move-1.0" : 'https://vbuttons.net/stagingapi/agentMove.php',
-  "agent-new-1.0" : 'https://vbuttons.net/stagingapi/agentNew.php',
-  "agent-2.0" : 'https://vbuttons.net/stagingapi/agent.php',
-  "agents-all-1.0" : 'https://vbuttons.net/stagingapi/agentsAll.php',
-  "closed-listings-1.0" : 'https://vbuttons.net/stagingapi/closedListing.php',
-  "listings-2.0" : 'https://vbuttons.net/stagingapi/listing.php',
-  "office-2.0" : 'https://vbuttons.net/stagingapi/office.php',
-  "listings-3.0" : 'https://vbuttons.net/stagingapi/listing3.php'
+  "agent-move-1.0" : 'https://vbuttons.net/api/agentMove.php',
+  "agent-new-1.0" : 'https://vbuttons.net/api/agentNew.php',
+  "agent-2.0" : 'https://vbuttons.net/api/agent.php',
+  "agents-all-1.0" : 'https://vbuttons.net/api/agentsAll.php',
+  "closed-listings-1.0" : 'https://vbuttons.net/api/closedListing.php',
+  "listings-2.0" : 'https://vbuttons.net/api/listing.php',
+  "office-2.0" : 'https://vbuttons.net/api/office.php',
+  "listings-3.0" : 'https://vbuttons.net/api/listing3.php'
 }
 
 endpoint_url_params = {
@@ -401,8 +400,8 @@ class MlsEndpointHelper:
 
             for node in xroot:
                 res = []
-                res.append(node.attrib.get(df_cols[0]))
-                for el in df_cols[1:]:
+               # res.append(node.attrib.get(df_cols[0]))
+                for el in df_cols[0:]:
                     if node is not None and node.find(el) is not None:
                         res.append(node.find(el).text)
                     else:
@@ -443,7 +442,7 @@ class MlsEndpointHelper:
         if self.env == 'dev':
             baseUrl=localEndpoints[endpoint]
         else:
-            baseUrl=prodEndpoints[endpoint]
+            baseUrl=uatEndpoints[endpoint]
         print('buildUrl : '+baseUrl)   
         yesterday = datetime.now() - timedelta(1)
         if not fromDate:
@@ -467,7 +466,7 @@ class MlsEndpointHelper:
                 #print('Headers'+resp.headers['Content-Disposition'])
                 #resp.headers['Content-Disposition'].split(';')[1].split('=')[1]
                 filename = endpoint+'.'+datetime.strftime(datetime.now(), '%m%d%Y')+'.xml'
-                print('filename ='+filename)
+                print('file '+filename+' was downloaded.')
                 # saving the xml file
                 with open(filename, 'wb') as fl:
                     fl.write(resp.content)
@@ -484,7 +483,7 @@ class MlsEndpointHelper:
         f=None
         t_mls_ca = self.getListMls_CA ()
         print(t_mls_ca)
-        char_to_replace = {'-': '','.': ''}
+        char_to_replace = {'-': '','.': ''} # ? why?
         try:
             spark_df=None
             for mls in t_mls_ca:
@@ -497,18 +496,18 @@ class MlsEndpointHelper:
                         df = self.parse_XML(f, cols) 
                         #frames.append(df)
                         g_df=pd.concat([g_df, df], axis=0)
+                        print(g_df)
                     except Exception as ei:
                         print('Exception in download_data_for_endpoint(In):', ei)  
                     finally:                        
                         f.close ()
             os.remove(f.name)
-            table_name = endpoint
+            table_name = endpoint 
             for key, value in char_to_replace.items():
                 table_name = table_name.replace(key, value)
             mySchema = self.getSchema(endpoint)                
             spark_df = spark.createDataFrame(g_df, schema=mySchema)
-            spark_df.write.format("parquet") \
-                        .mode("overwrite") \
+            spark_df.write.mode("append") \
                         .saveAsTable(table_name)
         except Exception as e:
             print('Exception in download_data_for_endpoint():', e)    
@@ -522,23 +521,32 @@ import concurrent.futures
 import time
 
 
-    
+#authToken='AMERFST7543567OP' # dev
+authToken='HVJOXQNIVXKOGOBGLOWU' #preprod
+
+
+
 def multi_run_wrapper(args):
     tool = MlsEndpointHelper()
-    tool.t_mls_ca =[278,238]
-    tool.env='dev'
+    # [278,14,4,29,238,125,165,16,167,45,5,201,36,92,1,156,6,3,295,36,345,65,63]
+    tool.t_mls_ca = [278,14,238,125,167,36,92]
+    tool.env='uat'
     return tool.download_data_for_endpoint(*args)  
     
-authToken='AMERFST7543567OP'
+
+
 #t_apis=['office-2.0','agent-2.0','listings-3.0','closed-listings-1.0','listings-2.0','agent-move-1.0','agent-new-1.0','agents-all-1.0']
 #
-arguments =[('listings-2.0','06-17-2022',None), ('office-2.0','06-17-2022',None)]
+
+endpoint = dbutils.widgets.get("endpoint")
+fromDate = dbutils.widgets.get("fromDate")
+toDate = dbutils.widgets.get("toDate")
+
+arguments =[(endpoint,fromDate,toDate)]
 start = time.perf_counter()
 
 # Test with one endpoint
 multi_run_wrapper(arguments[0])
-#
-#
 #
 #with concurrent.futures.ProcessPoolExecutor() as executor:
 #    pool = [executor.submit(multi_run_wrapper, i) for i in arguments]
