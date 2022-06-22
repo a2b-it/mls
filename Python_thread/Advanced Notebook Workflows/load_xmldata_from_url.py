@@ -35,40 +35,67 @@ endpoint_config_schema = {
      StructField("formerZip", StringType(), True)
    ]),
   "agent-new-1.0":StructType([
-     StructField("mlsSid", StringType(), True),
-     StructField("agentId", StringType(), True),
-     StructField("firstName", StringType(), True),
-     StructField("lastName", StringType(), True),
-     StructField("agentEmail", StringType(), True),
-     StructField("agentPhone1", StringType(), True),
-     StructField("dateFirstAppeared", StringType(), True),
-     StructField("officeId", StringType(), True),
-     StructField("officeName", StringType(), True),
-     StructField("officeAddress", StringType(), True),
-     StructField("officeCity", StringType(), True),
-     StructField("officeState", StringType(), True),
-     StructField("officeZip", StringType(), True)
+    StructField("mlsSid", StringType(), True),
+    StructField("agentId", StringType(), True),
+    StructField("firstName", StringType(), True),
+    StructField("lastName", StringType(), True),
+    StructField("agentEmail", StringType(), True),
+    StructField("agentPhone1", StringType(), True),
+    StructField("dateFirstAppeared", StringType(), True),
+    StructField("officeId", StringType(), True),
+    StructField("officeName", StringType(), True),
+    StructField("officeAddress", StringType(), True),
+    StructField("officeCity", StringType(), True),
+    StructField("officeState", StringType(), True),
+    StructField("officeZip", StringType(), True),
    ]),
   "agent-2.0":StructType([
-     StructField("mlsSid", StringType(), True),
-     StructField("listAgentId", StringType(), True),
-     StructField("listAgentFirstName", StringType(), True),
-     StructField("listAgentLastName", StringType(), True),
-     StructField("listAgentPhone1", StringType(), True)
+    StructField("mlsSid", StringType(), True),
+    StructField("agentId", StringType(), True),
+    StructField("firstName", StringType(), True),
+    StructField("lastName", StringType(), True),
+    StructField("agentStatus", StringType(), True),
+    StructField("agentPhone1", StringType(), True),
+    StructField("agentPhoneType1", StringType(), True),
+    StructField("agentPhone2", StringType(), True),
+    StructField("agentPhoneType2", StringType(), True),
+    StructField("agentPhone3", StringType(), True),
+    StructField("agentPhoneType3", StringType(), True),
+    StructField("agentFax", StringType(), True),
+    StructField("agentEmail", StringType(), True),
+    StructField("officeId", StringType(), True),
+    StructField("officeName", StringType(), True),
+    StructField("officeAddress", StringType(), True),
+    StructField("officeCity", StringType(), True),
+    StructField("officeState", StringType(), True),
+    StructField("officeZip", StringType(), True)
    ]),
   "agents-all-1.0":StructType([
      StructField("mlsSid", StringType(), True),
-     StructField("listAgentId", StringType(), True),
-     StructField("listAgentFirstName", StringType(), True),
-     StructField("listAgentLastName", StringType(), True),
-     StructField("listAgentPhone1", StringType(), True)
+    StructField("agentId", StringType(), True),
+    StructField("agentFirstName", StringType(), True),
+    StructField("agentLastName", StringType(), True),
+    StructField("agentOfficeId", StringType(), True),
+    StructField("agentStatus", StringType(), True)
    ]),
   "closed-listings-1.0":StructType([
      StructField("mlsSid", StringType(), True),
-     StructField("listAgentId", StringType(), True),
-     StructField("listAgentFirstName", StringType(), True),
-     StructField("listAgentLastName", StringType(), True),
-     StructField("listAgentPhone1", StringType(), True)
+    StructField("closeDate", StringType(), True),
+    StructField("listingId", StringType(), True),
+    StructField("taxId", StringType(), True),
+    StructField("streetName", StringType(), True),
+    StructField("streetNumber", StringType(), True),
+    StructField("zipCode", StringType(), True),
+    StructField("listOfficeId", StringType(), True),
+    StructField("sellOfficeId", StringType(), True),
+    StructField("salePrice", StringType(), True),
+    StructField("bank", StringType(), True),
+    StructField("listAgentId", StringType(), True),
+    StructField("sellAgentId", StringType(), True),
+    StructField("listingCounty", StringType(), True),
+    StructField("listingState", StringType(), True),
+    StructField("listingUnitNumber", StringType(), True),
+    StructField("insertDate", StringType(), True)
    ]),
   "listings-2.0":StructType([
      StructField("mlsSid", StringType(), True),
@@ -208,24 +235,51 @@ endpoint_config_cols = {
    ],
    "agent-2.0":[
       "mlsSid",
-      "listAgentId",
-      "listAgentFirstName",
-      "listAgentLastName",
-      "listAgentPhone1"
+        "agentId",
+        "firstName",
+        "lastName",
+        "agentStatus",
+        "agentPhone1",
+        "agentPhoneType1",
+        "agentPhone2",
+        "agentPhoneType2",
+        "agentPhone3",
+        "agentPhoneType3",
+        "agentFax",
+        "agentEmail",
+        "officeId",
+        "officeName",
+        "officeAddress",
+        "officeCity",
+        "officeState",
+        "officeZip"
    ],
    "agents-all-1.0":[
       "mlsSid",
-      "listAgentId",
-      "listAgentFirstName",
-      "listAgentLastName",
-      "listAgentPhone1"
+        "agentId",
+        "agentFirstName",
+        "agentLastName",
+        "agentOfficeId",
+        "agentStatus"
    ],
    "closed-listings-1.0":[
-      "mlsSid",
-      "listAgentId",
-      "listAgentFirstName",
-      "listAgentLastName",
-      "listAgentPhone1"
+     "mlsSid",
+    "closeDate",
+    "listingId",
+    "taxId",
+    "streetName",
+    "streetNumber",
+    "zipCode",
+    "listOfficeId",
+    "sellOfficeId",
+    "salePrice",
+    "bank",
+    "listAgentId",
+    "sellAgentId",
+    "listingCounty",
+    "listingState",
+    "listingUnitNumber",
+    "insertDate"
    ],
    "listings-2.0":[
      
@@ -328,6 +382,18 @@ endpoint_config_cols = {
 
 # COMMAND ----------
 
+env_config_mlsSid = {
+   "dev":[278,14,4,29,238,125,165,16,167,45,5,201,36,92,1,156,6,3,295,36,345,65,63],
+    "uat":[278,14,238,125,167,36,92]
+}
+
+env_config_token = {
+   "dev":'AMERFST7543567OP', # dev
+    "uat":'HVJOXQNIVXKOGOBGLOWU' #UAT
+}
+
+# COMMAND ----------
+
 # DBTITLE 1,URL Config dictionnaries
 ## StructField(<>, StringType(), True),
 ## 0: endpoint, 1: authToken, 2: mlsSid, 3: fromDate, 4: toDate( if applicable)
@@ -368,10 +434,6 @@ endpoint_url_params = {
 
 # COMMAND ----------
 
-'hello {0}, I am {1} {2}'.format('Adil', 'happy to meet you', '!')
-
-# COMMAND ----------
-
 spark = SparkSession.builder.appName('PySpark APP').getOrCreate()
 
 # COMMAND ----------
@@ -381,7 +443,7 @@ class MlsEndpointHelper:
     t_mls_ca =[278,14,4]
     t_apis=['agent-move-1.0','agent-new-1.0','agent-2.0','agents-all-1.0','closed-listings-1.0','listings-2.0','office-2.0','listings-3.0']
     #baseurl='https://vbuttons.net/stagingapi/'
-    authTokenauthToken='AMERFST7543567OP'
+    authToken='AMERFST7543567OP'
     env = 'dev'
     
     def parse_XML(self, xml_file, df_cols): 
@@ -437,20 +499,20 @@ class MlsEndpointHelper:
         
     def buildUrl (self, endpoint, mlsSid, fromDate, toDate):
         
-        print('buildUrl')
+        
         url=''
         if self.env == 'dev':
             baseUrl=localEndpoints[endpoint]
         else:
             baseUrl=uatEndpoints[endpoint]
-        print('buildUrl : '+baseUrl)   
+        print('buildUrl url {0} : {1}'.format(self.env,baseUrl))   
         yesterday = datetime.now() - timedelta(1)
         if not fromDate:
             fromDate = datetime.strftime(yesterday, '%m-%d-%Y')
         if not toDate:
             toDate = datetime.strftime(datetime.now(), '%m-%d-%Y')
         try:
-            url = endpoint_url_params[endpoint].format(baseUrl,authToken, mlsSid, fromDate,toDate)
+            url = endpoint_url_params[endpoint].format(baseUrl,self.authToken, mlsSid, fromDate,toDate)
         except Exception as e:
             print('Exception in buildUrl():['+endpoint+']', e)   
         return url
@@ -470,7 +532,8 @@ class MlsEndpointHelper:
                 # saving the xml file
                 with open(filename, 'wb') as fl:
                     fl.write(resp.content)
-                
+            else:   
+                print('Problem in loadUrlToFile() when downloading URL :['+ url +'] response status '+resp.status_code)
         except Exception as e:
             print('Exception in loadUrlToFile():['+ url +']', e)
             return None 
@@ -521,23 +584,21 @@ import concurrent.futures
 import time
 
 
-#authToken='AMERFST7543567OP' # dev
-authToken='HVJOXQNIVXKOGOBGLOWU' #preprod
 
 
 
 def multi_run_wrapper(args):
     tool = MlsEndpointHelper()
-    # [278,14,4,29,238,125,165,16,167,45,5,201,36,92,1,156,6,3,295,36,345,65,63]
-    tool.t_mls_ca = [278,14,238,125,167,36,92]
-    tool.env='uat'
+    tool.env=choosed_Env
+    tool.t_mls_ca = env_config_mlsSid[choosed_Env]
+    tool.authToken=env_config_token[choosed_Env]
     return tool.download_data_for_endpoint(*args)  
     
 
 
 #t_apis=['office-2.0','agent-2.0','listings-3.0','closed-listings-1.0','listings-2.0','agent-move-1.0','agent-new-1.0','agents-all-1.0']
 #
-
+choosed_Env=dbutils.widgets.get("env")
 endpoint = dbutils.widgets.get("endpoint")
 fromDate = dbutils.widgets.get("fromDate")
 toDate = dbutils.widgets.get("toDate")

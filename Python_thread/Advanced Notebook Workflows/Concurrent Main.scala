@@ -12,7 +12,7 @@
 
 // COMMAND ----------
 
-// MAGIC %run "./parallel-notebooks"
+// MAGIC %run "./parallel-notebooks-utils"
 
 // COMMAND ----------
 
@@ -31,15 +31,16 @@ import scala.language.postfixOps
 
 val fromDate ="06-16-2022";
 val toDate ="06-17-2022";
+val env = "dev"
 val notebooks = Seq(
-  NotebookData("load_xmldata_from_url", 600, Map("endpoint" -> "agent-move-1.0","fromDate" -> fromDate,"toDate" -> toDate)),
-  NotebookData("load_xmldata_from_url", 600, Map("endpoint" -> "agent-new-1.0","fromDate" -> fromDate,"toDate" -> toDate)),
-  //NotebookData("load_xmldata_from_url", 600, Map("endpoint" -> "agent-2.0","fromDate" -> fromDate,"toDate" -> toDate)),
-  //NotebookData("load_xmldata_from_url", 600, Map("endpoint" -> "agents-all-1.0","fromDate" -> fromDate,"toDate" -> toDate)),
-  //NotebookData("load_xmldata_from_url", 600, Map("endpoint" -> "closed-listings-1.0","fromDate" -> fromDate,"toDate" -> toDate)),
-  NotebookData("load_xmldata_from_url", 600, Map("endpoint" -> "listings-2.0","fromDate" -> fromDate,"toDate" -> toDate)),
-  NotebookData("load_xmldata_from_url", 600, Map("endpoint" -> "office-2.0","fromDate" -> fromDate,"toDate" -> toDate)),
-  NotebookData("load_xmldata_from_url", 600, Map("endpoint" -> "listings-3.0","fromDate" -> fromDate,"toDate" -> toDate))
+  NotebookData("load_xmldata_from_url", 600, Map("env" -> env, "endpoint" -> "agent-move-1.0","fromDate" -> fromDate,"toDate" -> toDate)),
+  NotebookData("load_xmldata_from_url", 600, Map("env" -> env, "endpoint" -> "agent-new-1.0","fromDate" -> fromDate,"toDate" -> toDate)),
+  NotebookData("load_xmldata_from_url", 600, Map("env" -> env, "endpoint" -> "agent-2.0","fromDate" -> fromDate,"toDate" -> toDate)),
+  NotebookData("load_xmldata_from_url", 600, Map("env" -> env, "endpoint" -> "agents-all-1.0","fromDate" -> fromDate,"toDate" -> toDate)),
+  NotebookData("load_xmldata_from_url", 600, Map("env" -> env, "endpoint" -> "closed-listings-1.0","fromDate" -> fromDate,"toDate" -> toDate)),
+  NotebookData("load_xmldata_from_url", 600, Map("env" -> env, "endpoint" -> "listings-2.0","fromDate" -> fromDate,"toDate" -> toDate)),
+  NotebookData("load_xmldata_from_url", 600, Map("env" -> env, "endpoint" -> "office-2.0","fromDate" -> fromDate,"toDate" -> toDate)),
+  NotebookData("load_xmldata_from_url", 600, Map("env" -> env, "endpoint" -> "listings-3.0","fromDate" -> fromDate,"toDate" -> toDate))
 )
 
 val res = parallelNotebooks(notebooks)
@@ -55,6 +56,13 @@ res.value
 // MAGIC for item in feedList:
 // MAGIC   print("""NotebookData("load_xmldata_from_url", 600, Map("endpoint" -> "{0}","fromDate" -> fromDate,"toDate" -> toDate))""".format(item))
 // MAGIC  
+
+// COMMAND ----------
+
+// MAGIC %python
+// MAGIC dataList=['mlsSid','agentId','firstName','lastName','agentStatus','agentPhone1','agentPhoneType1','agentPhone2','agentPhoneType2','agentPhone3','agentPhoneType3','agentFax','agentEmail','officeId','officeName','officeAddress','officeCity','officeState','officeZip']
+// MAGIC for item in dataList:
+// MAGIC   print('StructField("{0}", StringType(), True),'.format(item))
 
 // COMMAND ----------
 
